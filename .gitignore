@@ -1,0 +1,6 @@
+cmd/service-user/tmp
+postgres_data
+tmp
+.env
+migrations_data
+init.sql

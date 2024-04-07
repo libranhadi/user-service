@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS users (
+    id serial PRIMARY KEY,
+    firstname VARCHAR(100) NOT NULL,
+    lastname VARCHAR(100) NOT NULL,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);

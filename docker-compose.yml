@@ -1,0 +1,47 @@
+version: "3.8"
+services:
+  service-user:
+    build:
+      context: ./cmd/service-user
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - user-networks
+    volumes:
+      - ./cmd/service-user:/app
+    env_file:
+      - .env
+    depends_on: 
+      postgresql-service:
+        condition: service_healthy
+    links: 
+      - postgresql-service
+
+  postgresql-service:
+    container_name: postgre_db_container
+    image: postgres:16-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - user-networks
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    healthcheck:
+      test: pg_isready -U ${DB_USER} -d ${DB_NAME}
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: always
+
+networks:
+  user-networks:
+    driver: bridge
+volumes:
+  postgres_data: {}
+  migrations : {}

@@ -11,6 +11,11 @@ type User struct {
 	Password  string
 }
 
+type UserRole struct {
+	User User
+	Role Role
+}
+
 func (u User) Validate() error {
 	if len(u.Email) == 0 {
 		return fmt.Errorf("email field is required")

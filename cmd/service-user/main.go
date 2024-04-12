@@ -21,7 +21,7 @@ func main() {
 
 	app := fiber.New()
 	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hi from service-user")
+		return nil
 	})
 
 	app.Post("/user/register", userController.Register)

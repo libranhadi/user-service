@@ -1,6 +1,7 @@
 version: "3.8"
 services:
   service-user:
+    container_name: service_user
     build:
       context: ./cmd/service-user
       dockerfile: Dockerfile
@@ -8,6 +9,7 @@ services:
       - "3000:3000"
     networks:
       - user-networks
+      - shared-network
     volumes:
       - ./cmd/service-user:/app
     env_file:
@@ -42,6 +44,8 @@ services:
 networks:
   user-networks:
     driver: bridge
+  shared-network:
+    external: true
 volumes:
   postgres_data: {}
   migrations : {}

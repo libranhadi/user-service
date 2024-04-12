@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 	"service-user/helpers"
 	"service-user/model"
@@ -35,8 +34,6 @@ func (uc *userController) Register(c *fiber.Ctx) error {
 	}
 
 	err := uc.userService.Register(requestBody)
-	fmt.Println(err)
-
 	if err != nil {
 		webResponse, ok := err.(*helpers.WebResponse)
 		if ok {
@@ -67,8 +64,7 @@ func (uc *userController) Login(c *fiber.Ctx) error {
 			Message: "Invalid data request",
 		})
 	}
-	var result model.User
-	_, err := uc.userService.Login(requestBody)
+	resp, err := uc.userService.Login(requestBody)
 
 	if err != nil {
 		webResponse, ok := err.(*helpers.WebResponse)
@@ -89,12 +85,26 @@ func (uc *userController) Login(c *fiber.Ctx) error {
 		Code        int
 		Status      string
 		AccessToken string
-		Data        interface{}
+		Message     string
+		Data        struct {
+			ID       uint   `json:"id"`
+			Email    string `json:"email"`
+			Username string `json:"username"`
+		} `json:"Data"`
 	}{
 		Code:        200,
 		Status:      "OK",
 		AccessToken: access_token,
-		Data:        result,
+		Message:     "Successfully login !",
+		Data: struct {
+			ID       uint   `json:"id"`
+			Email    string `json:"email"`
+			Username string `json:"username"`
+		}{
+			ID:       resp.Id,
+			Email:    resp.Email,
+			Username: resp.Username,
+		},
 	})
 }
 

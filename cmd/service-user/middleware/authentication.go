@@ -21,13 +21,17 @@ func NewAuthImpl(repository repository.IUserRepository) Auth {
 }
 
 func (auth *authImpl) Authentication(c *fiber.Ctx) error {
-	access_token := c.Get("access_token")
+	access_token := c.Get("Authorization")
+	tokenString := ""
+	if len(access_token) > len("Bearer ") {
+		tokenString = access_token[len("Bearer "):]
+	}
 
-	if len(access_token) == 0 {
+	if len(tokenString) == 0 {
 		return c.Status(401).SendString("Invalid token: Access token missing")
 	}
 
-	checkToken, err := helpers.VerifyToken(access_token)
+	checkToken, err := helpers.VerifyToken(tokenString)
 
 	if err != nil {
 		return c.Status(401).SendString("Invalid token: Failed to verify token")
@@ -59,9 +63,7 @@ func (auth *authImpl) Authentication(c *fiber.Ctx) error {
 		})
 	}
 
-	// Set user data in context for future use
 	c.Locals("user", user)
 
-	// Continue processing if user is found
 	return c.Next()
 }

@@ -81,13 +81,13 @@ func (userService *UserService) Login(user *model.User) (*model.User, error) {
 			Code:    http.StatusBadRequest,
 			Status:  "Bad Request",
 			Message: err.Error(),
-			Data:    user,
+			Data:    nil,
 		}
 	}
 
 	userExist, err := userService.userRepository.FindUserByEmail(user.Email)
 	if err != nil {
-		return userExist, &helpers.WebResponse{
+		return nil, &helpers.WebResponse{
 			Code:    http.StatusBadRequest,
 			Status:  "Bad Request",
 			Message: err.Error(),
@@ -107,7 +107,7 @@ func (userService *UserService) Login(user *model.User) (*model.User, error) {
 		return userExist, &helpers.WebResponse{
 			Code:    http.StatusBadRequest,
 			Status:  "BAD_REQUEST",
-			Data:    userExist,
+			Data:    nil,
 			Message: "Password doesn't match!",
 		}
 	}

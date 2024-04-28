@@ -47,18 +47,18 @@ func (auth *authImpl) Authentication(c *fiber.Ctx) error {
 	}
 
 	user, err := auth.userRepository.FindUserByEmail(email)
-	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(&helpers.WebResponse{
-			Code:    http.StatusInternalServerError,
-			Status:  "Internal Server Error",
-			Message: err.Error(),
-		})
-	}
-
 	if user == nil {
 		return c.Status(http.StatusNotFound).JSON(&helpers.WebResponse{
 			Code:    http.StatusNotFound,
 			Status:  "Not Found",
+			Message: err.Error(),
+		})
+	}
+
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(&helpers.WebResponse{
+			Code:    http.StatusInternalServerError,
+			Status:  "Internal Server Error",
 			Message: err.Error(),
 		})
 	}

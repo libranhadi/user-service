@@ -35,7 +35,7 @@ func (userRepo *UserRepository) Create(user *model.User) error {
 }
 
 func (userRepo *UserRepository) FindUserByEmail(email string) (*model.User, error) {
-	query := "SELECT id, password, email, username FROM users WHERE email = $1"
+	query := "SELECT id, password, email, username FROM view_active_users WHERE email = $1"
 	ctx, cancel := config.NewContext()
 	defer cancel()
 
@@ -61,7 +61,7 @@ func (userRepo *UserRepository) FindUserByEmail(email string) (*model.User, erro
 }
 
 func (userRepo *UserRepository) FindUserByUsername(username string) (*model.User, error) {
-	query := "SELECT id, username , password, email FROM users WHERE username = $1"
+	query := "SELECT id, username , password, email FROM view_active_users WHERE username = $1"
 	ctx, cancel := config.NewContext()
 	defer cancel()
 

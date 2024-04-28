@@ -24,9 +24,11 @@ func main() {
 		return nil
 	})
 
-	app.Post("/user/register", userController.Register)
-	app.Post("/user/login", userController.Login)
-	app.Get("/user/auth", middleware.Authentication, userController.Auth)
+	users := app.Group("/users")
+
+	users.Post("/register", userController.Register)
+	users.Post("/login", userController.Login)
+	users.Get("/auth", middleware.Authentication, userController.Auth)
 
 	port := 3000
 	fmt.Printf("Service user is running on port:%d...\n ", port)
